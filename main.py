@@ -91,27 +91,27 @@ class GraphView(urwid.WidgetWrap):
     graph display.
     """
     palette = [
-        ('body',         'black',      'light gray', 'standout'),
-        ('header',       'white',      'dark red',   'bold'),
-        ('screen edge',  'light blue', 'dark cyan'),
-        ('main shadow',  'dark gray',  'black'),
-        ('line',         'black',      'light gray', 'standout'),
-        ('bg background','light gray', 'black'),
-        ('bg 1',         'black',      'dark blue', 'standout'),
-        ('bg 1 smooth',  'dark blue',  'black'),
-        ('bg 2',         'black',      'dark cyan', 'standout'),
-        ('bg 2 smooth',  'dark cyan',  'black'),
-        ('button normal','light gray', 'dark blue', 'standout'),
-        ('button select','white',      'dark green'),
-        ('line',         'black',      'light gray', 'standout'),
-        ('pg normal',    'white',      'black', 'standout'),
-        ('pg complete',  'white',      'dark magenta'),
-        ('pg smooth',     'dark magenta','black')
+        ('body',          'black',        'light gray', 'standout'),
+        ('header',        'white',        'dark red',   'bold'),
+        ('screen edge',   'light blue',   'dark cyan'),
+        ('main shadow',   'dark gray',    'black'),
+        ('line',          'black',        'light gray', 'standout'),
+        ('bg background', 'light gray',   'black'),
+        ('bg 1',          'black',        'dark blue',  'standout'),
+        ('bg 1 smooth',   'dark blue',    'black'),
+        ('bg 2',          'black',        'dark cyan',  'standout'),
+        ('bg 2 smooth',   'dark cyan',    'black'),
+        ('button normal', 'light gray',   'dark blue',  'standout'),
+        ('button select', 'white',        'dark green'),
+        ('line',          'black',        'light gray', 'standout'),
+        ('pg normal',     'white',        'black',      'standout'),
+        ('pg complete',   'white',        'dark magenta'),
+        ('pg smooth',     'dark magenta', 'black')
         ]
 
     graph_samples_per_bar = 10
-    graph_num_bars = 5
-    graph_offset_per_second = 5
+    graph_num_bars = 10
+    graph_offset_per_second = 1
 
     def __init__(self, controller):
         self.controller = controller
