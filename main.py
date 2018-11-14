@@ -1,21 +1,16 @@
 import urwid
 
-def show_or_exit(key):
+def exit_on_q(key):
     if key in ('q', 'Q'):
         raise urwid.ExitMainLoop()
-    text.set_text(text.get_text()[0] + key)
-    if key == 'r':
-        text.set_align_mode('right')
 
-pelette = {
-    ('banner', 'black', 'light gray'),
-    ('streak', 'black', 'dark red'),
-    ('bg', 'black', 'dark blue')
-}
+class QuestionBox(urwid.Filler):
+    def keypress(self, size, key):
+        if key != 'enter':
+            return super(QuestionBox, self).keypress(size, key)
+        self.original_widget = urwid.Text(
+            'Nice to meet you\n{text}\nPress q to exit'.format(text = edit.edit_text))
 
-text = urwid.Text(('banner', 'Hello World'), align = 'center')
-map1 = urwid.AttrMap(text, 'streak')
-fill = urwid.Filler(map1)
-map2 = urwid.AttrMap(fill, 'bg')
-loop = urwid.MainLoop(map2, pelette, unhandled_input = show_or_exit)
-loop.run()
+edit = urwid.Edit('what is your name\n')
+fill = QuestionBox(edit)
+urwid.MainLoop(fill, unhandled_input = exit_on_q).run()
