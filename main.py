@@ -6,7 +6,7 @@ reply = urwid.Text('')
 button = urwid.Button('exit')
 div = urwid.Divider()
 pile = urwid.Pile([ask, div, reply, div, button])
-top = urwid.Filler(pile, valign = 'top')
+top = urwid.Columns([pile, div], 1)
 
 def on_ask_change(edit, new_edit_text):
     reply.set_text(('i say', 'nice to meet you, ' + new_edit_text))
