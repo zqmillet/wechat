@@ -1,8 +1,6 @@
 import urwid
 
-palette = [('i say', 'default, bold', 'default', 'bold'),]
-ask1 = urwid.Edit(('i say', 'what is your name?\n'))
-ask2 = urwid.Edit(('i say', 'what is your name?\n'))
-top = urwid.Columns([ask1, ask2])
+ask = urwid.Edit('what is your name?\n')
+top = urwid.Filler(ask)
 
-urwid.MainLoop(top, palette).run()
+urwid.MainLoop(urwid.Columns([top, top])).run()
