@@ -1,16 +1,27 @@
-import urwid
+def main():
+    palette = [
+        ('body','black','dark cyan', 'standout'),
+        ('foot','light gray', 'black'),
+        ('key','light cyan', 'black', 'underline'),
+        ('title', 'white', 'black',),
+        ]
 
-widget1 = urwid.Edit('what is your name?\n')
-widget1 = urwid.LineBox(widget1)
-widget1 = urwid.Padding(widget1)
-widget1 = urwid.Filler(widget1)
+    footer_text = [
+        ('title', "Fibonacci Set Viewer"), "    ",
+        ('key', "UP"), ", ", ('key', "DOWN"), ", ",
+        ('key', "PAGE UP"), " and ", ('key', "PAGE DOWN"),
+        " move view  ",
+        ('key', "Q"), " exits",
+        ]
 
-widget2 = urwid.Edit('what is your name?\n')
-widget2 = urwid.LineBox(widget2)
-widget2 = urwid.Padding(widget2)
-widget2 = urwid.Filler(widget2)
+    def exit_on_q(input):
+        if input in ('q', 'Q'):
+            raise urwid.ExitMainLoop()
 
-vline = urwid.AttrWrap( urwid.SolidFill(u'\u2502'), 'line')
+    listbox = urwid.ListBox(FibonacciWalker())
+    footer = urwid.AttrMap(urwid.Text(footer_text), 'foot')
+    view = urwid.Frame(urwid.AttrWrap(listbox, 'body'), footer=footer)
+    loop = urwid.MainLoop(view, palette, unhandled_input=exit_on_q)
+    loop.run()
 
-piles = urwid.Pile([('fixed', 4, widget1)] * 10)
-urwid.MainLoop(urwid.Columns([('weight', 1, piles), ('fixed', 1, vline), ('weight', 2, widget2)])).run()
+main()
