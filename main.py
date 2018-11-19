@@ -1,3 +1,55 @@
+import urwid
+
+class NumericLayout(urwid.TextLayout):
+    """
+    TextLayout class for bottom-right aligned numbers
+    """
+    def layout( self, text, width, align, wrap ):
+        """
+        Return layout structure for right justified numbers.
+        """
+        lt = len(text)
+        r = lt % width # remaining segment not full width wide
+        if r:
+            linestarts = range( r, lt, width )
+            return [
+                # right-align the remaining segment on 1st line
+                [(width-r,None),(r, 0, r)]
+                # fill the rest of the lines
+                ] + [[(width, x, x+width)] for x in linestarts]
+        else:
+            linestarts = range( 0, lt, width )
+            return [[(width, x, x+width)] for x in linestarts]
+
+class FibonacciWalker(urwid.ListWalker):
+    """ListWalker-compatible class for browsing fibonacci set.
+    positions returned are (value at position-1, value at position) tuples.
+    """
+    def __init__(self):
+        self.focus = (0,1)
+        self.numeric_layout = NumericLayout()
+
+    def _get_at_pos(self, pos):
+        """Return a widget and the position passed."""
+        return urwid.Text("%d"%pos[1], layout=self.numeric_layout), pos
+
+    def get_focus(self):
+        return self._get_at_pos(self.focus)
+
+    def set_focus(self, focus):
+        self.focus = focus
+        self._modified()
+
+    def get_next(self, start_from):
+        a, b = start_from
+        focus = b, a+b
+        return self._get_at_pos(focus)
+
+    def get_prev(self, start_from):
+        a, b = start_from
+        focus = b-a, a
+        return self._get_at_pos(focus)
+
 def main():
     palette = [
         ('body','black','dark cyan', 'standout'),
