@@ -12,4 +12,5 @@ widget2 = urwid.Filler(widget2)
 
 vline = urwid.AttrWrap( urwid.SolidFill(u'\u2502'), 'line')
 
-urwid.MainLoop(urwid.Columns([('weight', 1, widget1), ('fixed', 1, vline), ('weight', 2, widget2)])).run()
+piles = urwid.Pile([('fixed', 4, widget1)] * 10)
+urwid.MainLoop(urwid.Columns([('weight', 1, piles), ('fixed', 1, vline), ('weight', 2, widget2)])).run()
