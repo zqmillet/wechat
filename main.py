@@ -10,6 +10,7 @@ class NumericLayout(urwid.TextLayout):
         """
         lt = len(text)
         r = lt % width # remaining segment not full width wide
+        import pdb; pdb.set_trace()
         if r:
             linestarts = range( r, lt, width )
             return [
