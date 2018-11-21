@@ -10,17 +10,20 @@ class NumericLayout(urwid.TextLayout):
         """
         lt = len(text)
         r = lt % width # remaining segment not full width wide
-        import pdb; pdb.set_trace()
         if r:
             linestarts = range( r, lt, width )
-            return [
+            result = [
                 # right-align the remaining segment on 1st line
                 [(width-r,None),(r, 0, r)]
                 # fill the rest of the lines
                 ] + [[(width, x, x+width)] for x in linestarts]
+            import pudb; pudb.set_trace()
+            return result
         else:
             linestarts = range( 0, lt, width )
-            return [[(width, x, x+width)] for x in linestarts]
+            result = [[(width, x, x+width)] for x in linestarts]
+            import pudb; pudb.set_trace()
+            return result
 
 class FibonacciWalker(urwid.ListWalker):
     """ListWalker-compatible class for browsing fibonacci set.
