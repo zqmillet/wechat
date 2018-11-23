@@ -638,6 +638,7 @@ class CalcDisplay:
     def keypress(self, key):
         """Handle a keystroke."""
 
+        import pudb; pudb.set_trace()
         self.loop.process_input([key])
 
         if key.upper() in COLUMN_KEYS:
