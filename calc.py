@@ -490,8 +490,6 @@ class CellColumn( urwid.WidgetWrap ):
         return self.content[-1].get_result()
 
 
-
-
 class HelpColumn(urwid.BoxWidget):
     help_text = [
         ('title', "Column Calculator"),
@@ -769,7 +767,6 @@ class CalcDisplay:
         return col.get_expression(), "%d"%col.get_result()
 
 
-
 class CalcNumLayout(urwid.TextLayout):
     """
     TextLayout class for bottom-right aligned numbers with a space on
@@ -802,8 +799,6 @@ class CalcNumLayout(urwid.TextLayout):
             l.append( [(width-1,None),(0,0)] )
 
         return l
-
-
 
 
 def main():
