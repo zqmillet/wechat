@@ -11,19 +11,24 @@ class ChatListItem(urwid.Filler):
     text = None
 
     def __init__(self, name, text):
-        self.name = name
-        self.text = text
-        import pdb; pdb.set_trace()
-        super(ChatListItem, self).__init__(text1)
+        self.name = urwid.Text(name)
+        self.text = urwid.Text(text, align = 'right')
 
 class ChatListBox(urwid.ListBox):
-    def __init__(self, widget_list):
+    def __init__(self, chat_list_item_list):
+        widget_list = list()
+        for chat_list_item in chat_list_item_list:
+            widget_list.append(chat_list_item.name)
+            widget_list.append(chat_list_item.text)
+            widget_list.append(urwid.Divider('─'))
+        widget_list.pop()
         super(ChatListBox, self).__init__(urwid.SimpleListWalker(widget_list))
 
-listbox = ChatListBox([
-    ChatListItem('123', '333'),
-    text2,
-    urwid.Divider('─', top = 0),
-    text1,
-    text2])
+chat_list_item_list = [
+    ChatListItem('qiqi1', 'hello1'),
+    ChatListItem('qiqi2', 'hello2'),
+    ChatListItem('qiqi3', 'hello3'),
+    ChatListItem('qiqi4', 'hello4')
+]
+listbox = ChatListBox(chat_list_item_list)
 urwid.MainLoop(listbox).run()
