@@ -26,7 +26,6 @@ class ChatListBox(urwid.ListBox):
         super(ChatListBox, self).__init__(urwid.SimpleListWalker(widget_list))
 
 bot = wxpy.Bot(cache_path=True, console_qr=True)
-import pdb; pdb.set_trace()
 chat_list_item_list = list()
 for chat in bot.chats():
     chat_list_item_list.append(ChatListItem(chat.raw['RemarkName'], chat.raw['NickName']))
