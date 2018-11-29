@@ -1,4 +1,5 @@
 import urwid
+import wxpy
 
 text1 = urwid.Text('2345')
 text2 = urwid.Text('23333', align = 'right')
@@ -24,11 +25,10 @@ class ChatListBox(urwid.ListBox):
         widget_list.pop()
         super(ChatListBox, self).__init__(urwid.SimpleListWalker(widget_list))
 
-chat_list_item_list = [
-    ChatListItem('qiqi1', 'hello1'),
-    ChatListItem('qiqi2', 'hello2'),
-    ChatListItem('qiqi3', 'hello3'),
-    ChatListItem('qiqi4', 'hello4')
-]
+bot = wxpy.Bot(cache_path=True, console_qr=True)
+import pdb; pdb.set_trace()
+chat_list_item_list = list()
+for chat in bot.chats():
+    chat_list_item_list.append(ChatListItem(chat.raw['RemarkName'], chat.raw['NickName']))
 listbox = ChatListBox(chat_list_item_list)
 urwid.MainLoop(listbox).run()
