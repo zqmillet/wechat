@@ -12,6 +12,16 @@ class Dictionary(dict):
         else:
             return self[key] if key in self else default_value
 
+def get(dictionary, key, default_value):
+    if isinstance(key, (list, tuple)):
+        for sub_key in key:
+            if sub_key in dictionary:
+                return dictionary[sub_key]
+        return default_value
+    else:
+        return dictionary[key] if key in dictionary else default_value
+
+
 def testcase():
     dictionary = {
         'test1': {
