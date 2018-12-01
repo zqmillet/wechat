@@ -24,7 +24,7 @@ def get(dictionary, key, default_value):
 
 def testcase():
     dictionary = {
-        'test1': {
+        test1': {
             'test2': 123,
             'test3': 234
         }
