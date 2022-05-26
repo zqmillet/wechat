@@ -1,16 +1,28 @@
 import urwid
 
-txt = urwid.Text('hello world')
-fill = urwid.Filler(txt, 'top')
-loop = urwid.MainLoop(fill)
+def question():
+    return urwid.Pile([urwid.Edit(('i say', 'what is your name?\n'))])
 
-def show_or_exit(key):
-    if key in ('q', 'Q'):
-        raise urwid.ExitMainLoop()
-    string, _ = txt.get_text()
-    txt.set_text(string + key)
+def answer(name):
+    return urwid.Text(('i say', f'nice to meet you {name}\n'))
 
-txt = urwid.Text('hello world')
-fill = urwid.Filler(txt, 'top')
-loop = urwid.MainLoop(fill, unhandled_input=show_or_exit)
-loop.run()
+class ConversationListBox(urwid.ListBox):
+    def __init__(self):
+        body = urwid.SimpleFocusListWalker([question()])
+        super().__init__(body)
+
+    def keypress(self, size, key):
+        key = super().keypress(size, key)
+        if key != 'enter':
+            return key
+
+        name = self.focus[0].edit_text
+        if not name:
+            raise urwid.ExitMainLoop()
+
+        self.focus.contents[1:] = [(answer(name), self.focus.options())]
+        pos = self.focus_position
+        self.body.insert(pos + 1, question())
+        self.focus_position = pos + 1
+
+urwid.MainLoop(ConversationListBox()).run()
