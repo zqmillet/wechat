@@ -1,28 +1,17 @@
-import urwid
+from urwid import WidgetDecoration, Text, MainLoop, Filler, Edit, Button, connect_signal, CheckBox, LineBox, SolidFill, ListBox, SimpleFocusListWalker
 
-def question():
-    return urwid.Pile([urwid.Edit(('i say', 'what is your name?\n'))])
+text = Text('hello ' * 1000, align='center', wrap='space')
+widge = WidgetDecoration(text)
+edit = Edit(caption='>>> ', multiline=True, mask='*')
+button = Button('press me')
+checkbox_1 = CheckBox('xxxx')
 
-def answer(name):
-    return urwid.Text(('i say', f'nice to meet you {name}\n'))
+def on_click():
+    print('clicked')
 
-class ConversationListBox(urwid.ListBox):
-    def __init__(self):
-        body = urwid.SimpleFocusListWalker([question()])
-        super().__init__(body)
+connect_signal(button, 'click', on_click, None)
 
-    def keypress(self, size, key):
-        key = super().keypress(size, key)
-        if key != 'enter':
-            return key
+list_box = ListBox(SimpleFocusListWalker([widge, edit, button, checkbox_1]))
 
-        name = self.focus[0].edit_text
-        if not name:
-            raise urwid.ExitMainLoop()
-
-        self.focus.contents[1:] = [(answer(name), self.focus.options())]
-        pos = self.focus_position
-        self.body.insert(pos + 1, question())
-        self.focus_position = pos + 1
-
-urwid.MainLoop(ConversationListBox()).run()
+# MainLoop(Filler(LineBox(checkbox_1, title='2333', title_align='left'))).run()
+MainLoop(list_box).run()
