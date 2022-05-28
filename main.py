@@ -1,124 +1,130 @@
-import urwid as u
+from utilities.wechat_bot import WechatBot
 
-class ListItem(u.WidgetWrap):
+bot = WechatBot(console_qr=True, cache_path=True)
+bot.enable_puid()
+chats = bot.chats()
 
-    def __init__ (self, country):
+import pdb; pdb.set_trace()
 
-        self.content = country
+# class ListItem(u.WidgetWrap):
 
-        name = country["name"]
+#     def __init__ (self, country):
 
-        t = u.AttrWrap(u.LineBox(u.Text('gouliguojiashengsiyi'), title=name, title_align='left'), "country", "country_selected")
+#         self.content = country
 
-        u.WidgetWrap.__init__(self, t)
+#         name = country["name"]
 
-    def selectable (self):
-        return True
+#         t = u.AttrWrap(u.LineBox(u.Text('gouliguojiashengsiyi'), title=name, title_align='left'), "country", "country_selected")
 
-    def keypress(self, size, key):
-        return key
+#         u.WidgetWrap.__init__(self, t)
 
-class ListView(u.WidgetWrap):
+#     def selectable (self):
+#         return True
 
-    def __init__(self):
+#     def keypress(self, size, key):
+#         return key
 
-        u.register_signal(self.__class__, ['show_details'])
+# class ListView(u.WidgetWrap):
 
-        self.walker = u.SimpleFocusListWalker([])
+#     def __init__(self):
 
-        lb = u.ListBox(self.walker)
+#         u.register_signal(self.__class__, ['show_details'])
 
-        u.WidgetWrap.__init__(self, lb)
+#         self.walker = u.SimpleFocusListWalker([])
 
-    def modified(self):
+#         lb = u.ListBox(self.walker)
 
-        focus_w, _ = self.walker.get_focus()
+#         u.WidgetWrap.__init__(self, lb)
 
-        u.emit_signal(self, 'show_details', focus_w.content)
+#     def modified(self):
 
-    def set_data(self, countries):
+#         focus_w, _ = self.walker.get_focus()
 
-        countries_widgets = [ListItem(c) for c in countries]
+#         u.emit_signal(self, 'show_details', focus_w.content)
 
-        u.disconnect_signal(self.walker, 'modified', self.modified)
+#     def set_data(self, countries):
 
-        while len(self.walker) > 0:
-            self.walker.pop()
+#         countries_widgets = [ListItem(c) for c in countries]
 
-        self.walker.extend(countries_widgets)
+#         u.disconnect_signal(self.walker, 'modified', self.modified)
 
-        u.connect_signal(self.walker, "modified", self.modified)
+#         while len(self.walker) > 0:
+#             self.walker.pop()
 
-        self.walker.set_focus(0)
+#         self.walker.extend(countries_widgets)
 
-class DetailView(u.WidgetWrap):
+#         u.connect_signal(self.walker, "modified", self.modified)
 
-    def __init__ (self):
-        t = u.Text("")
-        u.WidgetWrap.__init__(self, t)
+#         self.walker.set_focus(0)
 
-    def set_country(self, c):
-        s = f'Name: {c["name"]}\nPop:  {c["pop"]}\nGDP:  {c["gdp"]}'
-        self._w.set_text(s)
+# class DetailView(u.WidgetWrap):
 
-class App(object):
+#     def __init__ (self):
+#         t = u.Text("")
+#         u.WidgetWrap.__init__(self, t)
 
-    def unhandled_input(self, key):
-        if key in ('q',):
-            raise u.ExitMainLoop()
+#     def set_country(self, c):
+#         s = f'Name: {c["name"]}\nPop:  {c["pop"]}\nGDP:  {c["gdp"]}'
+#         self._w.set_text(s)
 
-    def show_details(self, country):
-        self.detail_view.set_country(country)
+# class App(object):
 
-    def __init__(self):
+#     def unhandled_input(self, key):
+#         if key in ('q',):
+#             raise u.ExitMainLoop()
 
-        self.palette = {
-            ("bg",               "black",       "white"),
-            ("country",          "black",       "white"),
-            ("country_selected", "black",       "yellow"),
-            ("footer",           "white, bold", "dark red")
-        }
+#     def show_details(self, country):
+#         self.detail_view.set_country(country)
 
-        self.list_view = ListView()
-        self.detail_view = DetailView()
+#     def __init__(self):
 
-        u.connect_signal(self.list_view, 'show_details', self.show_details)
+#         self.palette = {
+#             ("bg",               "black",       "white"),
+#             ("country",          "black",       "white"),
+#             ("country_selected", "black",       "yellow"),
+#             ("footer",           "white, bold", "dark red")
+#         }
 
-        footer = u.AttrWrap(u.Text(" Q to exit"), "footer")
+#         self.list_view = ListView()
+#         self.detail_view = DetailView()
 
-        col_rows = u.raw_display.Screen().get_cols_rows()
-        h = col_rows[0] - 2
+#         u.connect_signal(self.list_view, 'show_details', self.show_details)
 
-        f1 = u.Filler(self.list_view, valign='top', height=h)
-        f2 = u.Filler(self.detail_view, valign='top')
+#         footer = u.AttrWrap(u.Text(" Q to exit"), "footer")
 
-        c_list = u.LineBox(f1, title="聊天", title_align='left')
-        c_details = u.LineBox(f2, title="Country Details")
+#         col_rows = u.raw_display.Screen().get_cols_rows()
+#         h = col_rows[0] - 2
 
-        columns = u.Columns([('weight', 30, c_list), ('weight', 70, c_details)])
+#         f1 = u.Filler(self.list_view, valign='top', height=h)
+#         f2 = u.Filler(self.detail_view, valign='top')
 
-        frame = u.AttrMap(u.Frame(body=columns, footer=footer), 'bg')
+#         c_list = u.LineBox(f1, title="聊天", title_align='left')
+#         c_details = u.LineBox(f2, title="Country Details")
 
-        self.loop = u.MainLoop(frame, self.palette, unhandled_input=self.unhandled_input)
+#         columns = u.Columns([('weight', 30, c_list), ('weight', 70, c_details)])
 
-    def update_data(self):
+#         frame = u.AttrMap(u.Frame(body=columns, footer=footer), 'bg')
 
-        l = [] # https://databank.worldbank.org/embed/Population-and-GDP-by-Country/id/29c4df41
-        for _ in range(10):
-            l.append({"name":"USA",     "pop":"325,084,756",   "gdp":"$ 19.485 trillion"})
-            l.append({"name":"China",   "pop":"1,421,021,791", "gdp":"$ 12.238 trillion"})
-            l.append({"name":"Japan",   "pop":"127,502,725",   "gdp":"$ 4.872 trillion"})
-            l.append({"name":"Germany", "pop":"82,658,409",    "gdp":"$ 3.693 trillion"})
-            l.append({"name":"India",   "pop":"1,338,676,785", "gdp":"$ 2.651 trillion"})
+#         self.loop = u.MainLoop(frame, self.palette, unhandled_input=self.unhandled_input)
 
-        self.list_view.set_data(l)
+#     def update_data(self):
 
-    def start(self):
+#         l = [] # https://databank.worldbank.org/embed/Population-and-GDP-by-Country/id/29c4df41
+#         for _ in range(10):
+#             l.append({"name":"USA",     "pop":"325,084,756",   "gdp":"$ 19.485 trillion"})
+#             l.append({"name":"China",   "pop":"1,421,021,791", "gdp":"$ 12.238 trillion"})
+#             l.append({"name":"Japan",   "pop":"127,502,725",   "gdp":"$ 4.872 trillion"})
+#             l.append({"name":"Germany", "pop":"82,658,409",    "gdp":"$ 3.693 trillion"})
+#             l.append({"name":"India",   "pop":"1,338,676,785", "gdp":"$ 2.651 trillion"})
 
-        self.update_data()
-        self.loop.run()
+#         self.list_view.set_data(l)
 
-if __name__ == '__main__':
+#     def start(self):
 
-    app = App()
-    app.start()
+#         self.update_data()
+#         self.loop.run()
+
+# if __name__ == '__main__':
+
+#     app = App()
+#     app.start()
