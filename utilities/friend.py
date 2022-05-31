@@ -11,3 +11,6 @@ class Friend(BaseModel):
 
     def __repr__(self):
         return f'<Friend {self.remark_name or self.nick_name}>'
+
+    def __str__(self):
+        return f'<Friend {self.remark_name or self.nick_name}>'
